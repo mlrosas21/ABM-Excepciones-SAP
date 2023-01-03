@@ -1,7 +1,126 @@
-<mvc:View controllerName="ypf.zparamfreegd0.controller.Exceptions"
+<mvc:View
+	controllerName="ypf.zparamfreegd0.controller.Exceptions"
     xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns:core="sap.ui.core"
     xmlns="sap.m">
     <Page id="page" title="{i18n>title}">
-        <content />
+        <Table id="idExceptionsTable"
+            inset="false"
+            items="{
+                path: '/ExceptionsSet'
+            }">
+            <headerToolbar>
+                <OverflowToolbar id="tableOverflowToolbar">
+                    <content>
+                        <Title id="tableTitle" text="Excepciones" level="H2"/>
+                        <ToolbarSpacer id="tableTitleSpacer" />
+                        <Button
+                            id="addButton"
+                            icon="sap-icon://add"
+                            type="Transparent"
+							text="Add"
+                            visible="{=!${viewModel>/editMode}}"                          
+                        />
+                        <Button
+                            id="deleteButton"
+                            icon="sap-icon://delete"
+                            type="Transparent"
+							text="Delete"
+                            visible="{viewModel>/editMode}"                        
+                        />
+                        <Button
+                            id="editButton"
+                            icon="sap-icon://edit"
+                            type="Transparent"
+							text="Edit"
+                            visible="{=!${viewModel>/editMode}}"
+                            press="onEdit"                          
+                        />
+                        <Button
+                            id="saveButton"
+                            icon="sap-icon://save"
+                            type="Transparent"
+							text="Save"                        
+                            visible="{viewModel>/editMode}"
+                        />
+                        <Button
+                            id="cancelButton"
+                            icon="sap-icon://decline"
+                            type="Transparent"
+							text="Cancel"          
+                            visible="{viewModel>/editMode}"
+                            press="onCancel"              
+                        />
+
+                    </content>
+                </OverflowToolbar>
+            </headerToolbar>
+            <!-- <infoToolbar>
+                <OverflowToolbar>
+                    <Label text="Wide range of available products"/>
+                </OverflowToolbar>
+            </infoToolbar> -->
+            <columns>
+                <Column id="columnId1">
+                    <Text id="columnTitle1" text="Product" />
+                </Column>
+                <Column id="columnId2"
+                    demandPopin="true"
+                    hAlign="Center">
+                    <Text id="columnTitle2" text="Object" />
+                </Column>
+                <Column id="columnId3"
+                    demandPopin="true"
+                    hAlign="Center">
+                    <Text id="columnTitle3" text="Number" />
+                </Column>
+                <Column id="columnId4"
+                    minScreenWidth="Desktop"
+                    demandPopin="true"
+                    width="25%">
+                    <Text id="columnTitle4" text="Value" />
+                </Column>
+                <Column id="columnId5"
+                    minScreenWidth="Desktop"
+                    width="25%">
+                    <Text id="columnTitle5" text="Description" />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem id="tableColumnItems">
+                    <cells>
+                        <ObjectIdentifier
+                            id="tableItems1"
+                            title="{Program}"/>
+                        <ObjectIdentifier
+                            id="tableItems2"
+                            title="{Object}"/>
+                        <ObjectNumber
+                            id="tableItems3"
+                            number="{Number}"/>
+                        <Text 
+                            id="tableItems4ReadOnly"
+                            text="{Value}"
+                            visible="{=!${viewModel>/editMode}}"/>
+                        <Input
+                            id="tableItems4Edit"
+                            value="{Value}"
+                            editable="{viewModel>/editMode}"
+                            visible="{viewModel>/editMode}"/>
+                        <Text 
+                            id="tableItems5ReadOnly"
+                            text="descRO"
+                            visible="{=!${viewModel>/editMode}}"/>
+                        
+                        
+                        <TextArea
+                            id="tableItems5Edit"
+                            value="descE"
+                            placeholder="Ingrese una descripción"
+                            editable="{viewModel>/editMode}" />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
     </Page>
 </mvc:View>
