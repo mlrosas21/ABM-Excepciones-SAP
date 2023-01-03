@@ -46,48 +46,58 @@ sap.ui.define([
             },
             onAdd: function(){
                 let oDeferredGroups = this.getView().getModel().getDeferredGroups();
-                if (this._oDialogCreacion) {
-                    this._oDialogCreacion.destroy();
+                if (this._oDialog) {
+                    this._oDialog.destroy();
                 }
-                this._onOpenDialog()
+                let oContext = this.getView().getModel().createEntry("/ExceptionsSet", {
+                    refreshAfterChange: true
+                });
+                this._onOpenDialog(oContext)
             },
-            _onOpenDialog: function(){
+            _onOpenDialog: function(context){
                 Fragment.load({
                     name: "ypf.zparamfreegd0.view.fragments.DialogCreation",
                     controller: this,
                     id: this.getView().getId()
                 }).then(function(oPopUp) {
                     this._oDialog = oPopUp;
+                    let oFormCreacion = this.getView().byId("idFormCreacion")
+                    oFormCreacion.setModel(this.getView().getModel())
+                    oFormCreacion.setBindingContext(context);
                     this.getView().addDependent(oPopUp);
                     this._oDialog.open()
                 }.bind(this))
             },
-            onCrearExcepcion: function(){
+            onCrearExcepcion: function(oEvent){
+                let that = this
                 MessageBox.confirm("Los cambios se asentarán en la base de datos. ¿Desea continuar?", {
                     actions: ["Confirmar", MessageBox.Action.CANCEL],
                     emphasizedAction: "Confirmar",
                     onClose: function (sAction) {
                         if (sAction === "Confirmar") {
-                            that.getView().getModel().submitChanges({
-                                success: function () {
-                                    that._oDialogCreacion.setBusy(false);
-                                    sap.m.MessageToast.show("Se han guardado los cambios");
-                                    that.getView().getModel().setDeferredGroups(ogetDeferredGroups);
-                                },
-                                error: function () {
-                                    that._oDialogCreacion.setBusy(false);
-                                    sap.m.MessageToast.show("Se producido un error, intente nuevamente");
-                                    that.getView().getModel().setDeferredGroups(ogetDeferredGroups);
-                                }
-                            });
-                            that._oDialogCreacion.close();
-                            that._oDialogCreacion.destroy();
+                            let oForm =  that.getView().byId("idFormCreacion")
+                            let oException = oEvent.getSource()
+                            console.log(oException)
+                            // that.getView().getModel().submitChanges({
+                            //     success: function () {
+                            //         that._oDialog.setBusy(false);
+                            //         sap.m.MessageToast.show("Se han guardado los cambios");
+                            //         that.getView().getModel().setDeferredGroups(ogetDeferredGroups);
+                            //     },
+                            //     error: function () {
+                            //         that._oDialog.setBusy(false);
+                            //         sap.m.MessageToast.show("Se producido un error, intente nuevamente");
+                            //         that.getView().getModel().setDeferredGroups(ogetDeferredGroups);
+                            //     }
+                            // });
+                            // that._oDialog.close();
+                            // that._oDialog.destroy();
                         } else {
                             that.getView().getModel().deleteCreatedEntry(oContext); // borrar entrada temporal
                             that.getView().getModel().resetChanges();
                             that.getView().getModel().setDeferredGroups(ogetDeferredGroups);
-                            that._oDialogCreacion.close();
-                            that._oDialogCreacion.destroy();
+                            that._oDialog.close();
+                            that._oDialog.destroy();
                         }
                     }
                 });
