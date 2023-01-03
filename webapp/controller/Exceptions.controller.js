@@ -23,12 +23,10 @@ sap.ui.define([
 
             },
             onEdit: function(){
-                console.log("EDIT")
                 this.toggleEditMode(true)
             },
             
             onCancel: function(){
-                console.log("CANCEL")
                 this.toggleEditMode(false)
                 this.getView().getModel().resetChanges();
             },
@@ -77,7 +75,6 @@ sap.ui.define([
                     emphasizedAction: "Confirmar",
                     onClose: function (sAction) {
                         if (sAction === "Confirmar") {
-                            // let oForm =  that.getView().byId("idFormCreacion");
                             that.getView().getModel().submitChanges({
                                 success: function () {
                                     that._oDialog.setBusy(false);
@@ -86,7 +83,7 @@ sap.ui.define([
                                 },
                                 error: function () {
                                     that._oDialog.setBusy(false);
-                                    sap.m.MessageToast.show("Se producido un error, intente nuevamente");
+                                    sap.m.MessageToast.show("Se ha producido un error, intente nuevamente");
                                     that.getView().getModel().setDeferredGroups(ogetDeferredGroups);
                                 }
                             });
@@ -98,6 +95,88 @@ sap.ui.define([
                             that.getView().getModel().setDeferredGroups(ogetDeferredGroups);
                             that._oDialog.close();
                             that._oDialog.destroy();
+                        }
+                    }
+                });
+            },
+            onSave: function(){
+                let that = this;
+				MessageBox.confirm("Los cambios se asentarán en la base de datos. ¿Desea continuar?", {
+					actions: ["Confirmar", MessageBox.Action.CANCEL],
+					emphasizedAction: "Confirmar",
+					onClose: function (sAction) {
+						if (sAction === "Confirmar") {
+							that.getView().getModel().submitChanges({
+								success: function (oResponse) {
+									if(oResponse.__batchResponses){
+										if(oResponse.__batchResponses[0].response){
+											if(oResponse.__batchResponses[0].response.statusCode === '404'){
+												that.getView().getModel().resetChanges();
+											}
+										}
+									}else{
+										sap.m.MessageToast.show("Se han guardado los cambios");
+									}
+                                    that.toggleEditMode(false);
+								},
+								error: function (oResponse) {
+									sap.m.MessageToast.show("Se ha producido un error, intente nuevamente");
+									that.getView().getModel().resetChanges();
+									that.toggleEditMode(false);
+								}
+							});
+						} else {
+							that.getView().getModel().resetChanges(); // borrar entradas temporales
+						}
+					}
+				});
+            },
+            onDelete: function () {
+                let that = this
+                let ogetDeferredGroups = this.getView().getModel().getDeferredGroups()
+                let oTable = this.getView().byId("idExceptionsTable")
+                let aSelContextPaths = oTable.getSelectedContextPaths();
+    
+                if (!aSelContextPaths.length) {
+                    sap.m.MessageToast.show("Seleccione al menos un registro");
+                    return;
+                }
+                MessageBox.confirm("Los cambios se asentarán en la base de datos. ¿Desea continuar?", {
+                    actions: ["Confirmar", MessageBox.Action.CANCEL],
+                    emphasizedAction: "Confirmar",
+                    onClose: function (sAction) {
+                        //MessageToast.show("Action selected: " + sAction);
+                        if (sAction === "Confirmar") {
+                            that.getView().getModel().setDeferredGroups(["deleted"]);
+                            that.getView().setBusy(true);
+    
+                            // armar grupo de borrado batch
+                            aSelContextPaths.forEach(function (sPath) {
+                                    this.getView().getModel().remove(sPath, {
+                                        groupId: "deleted",
+                                        refreshAfterChange: true
+                                    });
+                                }.bind(that))
+                                // efectuar borrado
+                            that.getView().getModel().submitChanges({
+                                success: function (oResponse) {
+                                    that.getView().setBusy(false);
+                                    sap.m.MessageToast.show("Se han borrado las entradas");
+                                    oTable.removeSelections();
+                                    oTable.setSelectedContextPaths([]);
+                                    that.getView().getModel().setDeferredGroups(ogetDeferredGroups);
+                                },
+                                error: function (oResponse) {
+                                    that.getView().setBusy(false);
+                                    sap.m.MessageToast.show("Se producido un error, intente nuevamente");
+                                    oTable.removeSelections();
+                                    oTable.setSelectedContextPaths([]);
+                                    that.getView().getModel().setDeferredGroups(ogetDeferredGroups);
+                                },
+                                groupId: "deleted"
+                            });
+                        }else{
+                            that.getView().getModel().setDeferredGroups(ogetDeferredGroups);
                         }
                     }
                 });
