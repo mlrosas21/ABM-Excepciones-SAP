@@ -1,0 +1,80 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:core="sap.ui.core">
+    <Dialog id="dialogEquipo" contentWidth="30%" busyIndicatorDelay="0" title="Añadir excepción" icon="sap-icon://sys-add">
+        		<l:Grid defaultSpan="L12 M12 S12" width="auto" id="idGrid">
+			<l:content>
+            <f:Form id="idFormCreacion" editable="true">
+                <f:layout>
+                    <f:ResponsiveGridLayout id="idGridLayout"
+                        labelSpanXL="4"
+                        labelSpanL="3"
+                        labelSpanM="4"
+                        labelSpanS="12"
+                        emptySpanXL="0"
+                        emptySpanL="4"
+                        emptySpanM="0"
+                        emptySpanS="0"
+                        columnsXL="2"
+                        columnsL="1"
+                        columnsM="1"
+                        singleContainerFullSize="false" />
+                </f:layout>
+                <f:formContainers>
+                    <f:FormContainer id="idFormContainer" >
+                        <f:formElements>
+                            <f:FormElement id="idFormElement1" label="Programa">
+                                <f:fields>
+                                    <Input
+                                        id="idDialogProgram"
+                                        placeholder="Ingrese una programa..."
+                                        value="{Program}"/> 
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement id="idFormElement2" label="Objeto">
+                                <f:fields>
+                                    <Input
+                                        id="idDialogObject"
+                                        placeholder="Ingrese un objeto..."
+                                        value="{Object}"/> 
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement id="idFormElement3" label="Número">
+                                <f:fields>
+                                    <Input
+                                        id="idDialogNumber"
+                                        placeholder="Ingrese un número..."
+                                        value="{Number}"/> 
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement id="idFormElement4" label="Valor">
+                                <f:fields>
+                                    <Input
+                                        id="idDialogValue"
+                                        placeholder="Ingrese un valor..."
+                                        value="{Value}"/> 
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement id="idFormElement5" label="Descripción">
+                                <f:fields>
+                                    <TextArea
+                                        id="idDialogDescription"
+                                        value="{Description}"
+                                        placeholder="Ingrese una descripción..."
+                                        width="100%" />
+                                </f:fields>
+                            </f:FormElement>
+                        </f:formElements>
+                    </f:FormContainer>
+                </f:formContainers>
+            </f:Form>
+			</l:content>
+		</l:Grid>
+        <buttons>
+			<Button id="idAcceptButton" text="Aceptar" press="onCrearExcepcion" type="Accept"/>
+            <Button id="idCancelButton" text="Cancelar" press="onDialogClose" type="Reject"/> 
+		</buttons>
+    </Dialog>
+</core:FragmentDefinition>

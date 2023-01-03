@@ -19,7 +19,8 @@
                             icon="sap-icon://add"
                             type="Transparent"
 							text="Add"
-                            visible="{=!${viewModel>/editMode}}"                          
+                            visible="{=!${viewModel>/editMode}}"
+                            press="onAdd"                          
                         />
                         <Button
                             id="deleteButton"
@@ -79,7 +80,7 @@
                     demandPopin="true"
                     width="25%">
                     <Text id="columnTitle4" text="Value" />
-                </Column>
+                </Column>          
                 <Column id="columnId5"
                     minScreenWidth="Desktop"
                     width="25%">
@@ -98,26 +99,16 @@
                         <ObjectNumber
                             id="tableItems3"
                             number="{Number}"/>
-                        <Text 
-                            id="tableItems4ReadOnly"
-                            text="{Value}"
-                            visible="{=!${viewModel>/editMode}}"/>
                         <Input
-                            id="tableItems4Edit"
+                            id="tableItems4"
                             value="{Value}"
-                            editable="{viewModel>/editMode}"
-                            visible="{viewModel>/editMode}"/>
-                        <Text 
-                            id="tableItems5ReadOnly"
-                            text="descRO"
-                            visible="{=!${viewModel>/editMode}}"/>
-                        
-                        
+                            editable="{viewModel>/editMode}"/>               
                         <TextArea
-                            id="tableItems5Edit"
-                            value="descE"
+                            id="tableItems5"
+                            value="{Description}"
                             placeholder="Ingrese una descripción"
-                            editable="{viewModel>/editMode}" />
+                            editable="{viewModel>/editMode}"
+                            width="100%" />
                     </cells>
                 </ColumnListItem>
             </items>
