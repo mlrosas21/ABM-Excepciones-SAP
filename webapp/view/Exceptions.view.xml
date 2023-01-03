@@ -4,6 +4,48 @@
     xmlns:core="sap.ui.core"
     xmlns="sap.m">
     <Page id="page" title="{i18n>title}">
+        <headerContent>
+            <Button
+                id="addButton"
+                icon="sap-icon://add"
+                type="Transparent"
+                text="Add"
+                visible="{=!${viewModel>/editMode}}"
+                press="onAdd"                          
+            />
+            <Button
+                id="deleteButton"
+                icon="sap-icon://delete"
+                type="Transparent"
+                text="Delete"
+                visible="{viewModel>/editMode}"   
+                press="onDelete"                     
+            />
+            <Button
+                id="editButton"
+                icon="sap-icon://edit"
+                type="Transparent"
+                text="Edit"
+                visible="{=!${viewModel>/editMode}}"
+                press="onEdit"                          
+            />
+            <Button
+                id="saveButton"
+                icon="sap-icon://save"
+                type="Transparent"
+                text="Save"                        
+                visible="{viewModel>/editMode}"
+                press="onSave"
+            />
+            <Button
+                id="cancelButton"
+                icon="sap-icon://decline"
+                type="Transparent"
+                text="Cancel"          
+                visible="{viewModel>/editMode}"
+                press="onCancel"              
+            />
+		</headerContent>
         <Table id="idExceptionsTable"
             inset="false"
             items="{
@@ -14,46 +56,7 @@
                     <content>
                         <Title id="tableTitle" text="Excepciones" level="H2"/>
                         <ToolbarSpacer id="tableTitleSpacer" />
-                        <Button
-                            id="addButton"
-                            icon="sap-icon://add"
-                            type="Transparent"
-							text="Add"
-                            visible="{=!${viewModel>/editMode}}"
-                            press="onAdd"                          
-                        />
-                        <Button
-                            id="deleteButton"
-                            icon="sap-icon://delete"
-                            type="Transparent"
-							text="Delete"
-                            visible="{viewModel>/editMode}"   
-                            press="onDelete"                     
-                        />
-                        <Button
-                            id="editButton"
-                            icon="sap-icon://edit"
-                            type="Transparent"
-							text="Edit"
-                            visible="{=!${viewModel>/editMode}}"
-                            press="onEdit"                          
-                        />
-                        <Button
-                            id="saveButton"
-                            icon="sap-icon://save"
-                            type="Transparent"
-							text="Save"                        
-                            visible="{viewModel>/editMode}"
-                            press="onSave"
-                        />
-                        <Button
-                            id="cancelButton"
-                            icon="sap-icon://decline"
-                            type="Transparent"
-							text="Cancel"          
-                            visible="{viewModel>/editMode}"
-                            press="onCancel"              
-                        />
+                        
 
                     </content>
                 </OverflowToolbar>
