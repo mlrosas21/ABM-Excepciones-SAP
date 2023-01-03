@@ -43,7 +43,7 @@
                             </f:FormElement>
                             <f:FormElement id="idFormElement3" label="Número">
                                 <f:fields>
-                                    <Input
+                                    <StepInput
                                         id="idDialogNumber"
                                         placeholder="Ingrese un número..."
                                         value="{Number}"/> 

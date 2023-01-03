@@ -70,28 +70,28 @@ sap.ui.define([
             },
             onCrearExcepcion: function(oEvent){
                 let that = this
+                let oContext = that.getView().byId("idFormCreacion").getBindingContext()
+                let ogetDeferredGroups = this.getView().getModel().getDeferredGroups()
                 MessageBox.confirm("Los cambios se asentarán en la base de datos. ¿Desea continuar?", {
                     actions: ["Confirmar", MessageBox.Action.CANCEL],
                     emphasizedAction: "Confirmar",
                     onClose: function (sAction) {
                         if (sAction === "Confirmar") {
-                            let oForm =  that.getView().byId("idFormCreacion")
-                            let oException = oEvent.getSource()
-                            console.log(oException)
-                            // that.getView().getModel().submitChanges({
-                            //     success: function () {
-                            //         that._oDialog.setBusy(false);
-                            //         sap.m.MessageToast.show("Se han guardado los cambios");
-                            //         that.getView().getModel().setDeferredGroups(ogetDeferredGroups);
-                            //     },
-                            //     error: function () {
-                            //         that._oDialog.setBusy(false);
-                            //         sap.m.MessageToast.show("Se producido un error, intente nuevamente");
-                            //         that.getView().getModel().setDeferredGroups(ogetDeferredGroups);
-                            //     }
-                            // });
-                            // that._oDialog.close();
-                            // that._oDialog.destroy();
+                            // let oForm =  that.getView().byId("idFormCreacion");
+                            that.getView().getModel().submitChanges({
+                                success: function () {
+                                    that._oDialog.setBusy(false);
+                                    sap.m.MessageToast.show("Se han guardado los cambios");
+                                    that.getView().getModel().setDeferredGroups(ogetDeferredGroups);
+                                },
+                                error: function () {
+                                    that._oDialog.setBusy(false);
+                                    sap.m.MessageToast.show("Se producido un error, intente nuevamente");
+                                    that.getView().getModel().setDeferredGroups(ogetDeferredGroups);
+                                }
+                            });
+                            that._oDialog.close();
+                            that._oDialog.destroy();
                         } else {
                             that.getView().getModel().deleteCreatedEntry(oContext); // borrar entrada temporal
                             that.getView().getModel().resetChanges();
@@ -103,6 +103,11 @@ sap.ui.define([
                 });
             },
             onDialogClose: function(){
+                let oContext = this.getView().byId("idFormCreacion").getBindingContext()
+                let ogetDeferredGroups = this.getView().getModel().getDeferredGroups()
+                this.getView().getModel().deleteCreatedEntry(oContext); // borrar entrada temporal
+                this.getView().getModel().resetChanges();
+                this.getView().getModel().setDeferredGroups(ogetDeferredGroups);
                 this._oDialog.close();
                 this._oDialog.destroy();
             }
