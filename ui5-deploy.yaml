@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
+
+specVersion: "2.5"
+metadata:
+  name: ypf.zparamfreegd0
+type: application
+builder:
+  resources:
+    excludes:
+      - /test/**
+      - /localService/**
+  customTasks:
+    - name: deploy-to-abap
+      afterTask: generateCachebusterInfo
+      configuration:
+        target:
+          destination: GD0clnt200
+          url: http://gd0onbtp:8443
+        app:
+          name: Z_PRM_FREE_GD0
+          description: Aplicación para administración de excepciones
+          package: Z_MANT_GD0
+          transport: GD0K901270
