@@ -22,6 +22,9 @@ sap.ui.define([
                 this.getView().setModel(oViewModel, "viewModel");
 
             },
+            onAfterRendering: function(){
+                this.getView().getModel().setUseBatch(true)
+            },
             onEdit: function(){
                 this.toggleEditMode(true)
             },

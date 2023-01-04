@@ -3,7 +3,7 @@
 	xmlns:l="sap.ui.layout"
 	xmlns:f="sap.ui.layout.form"
 	xmlns:core="sap.ui.core">
-    <Dialog id="dialogEquipo" contentWidth="30%" busyIndicatorDelay="0" title="Añadir excepción" icon="sap-icon://sys-add">
+    <Dialog id="dialogEquipo" contentWidth="30%" busyIndicatorDelay="0" title="{i18n>dialog.title}" icon="sap-icon://sys-add">
         		<l:Grid defaultSpan="L12 M12 S12" width="auto" id="idGrid">
 			<l:content>
             <f:Form id="idFormCreacion" editable="true">
@@ -25,44 +25,48 @@
                 <f:formContainers>
                     <f:FormContainer id="idFormContainer" >
                         <f:formElements>
-                            <f:FormElement id="idFormElement1" label="Programa">
+                            <f:FormElement id="idFormElement1" label="{i18n>dialog.label.program}">
                                 <f:fields>
                                     <Input
+                                        required="true"
                                         id="idDialogProgram"
-                                        placeholder="Ingrese una programa..."
+                                        placeholder="{i18n>dialog.ph.program}"
                                         value="{Program}"/> 
                                 </f:fields>
                             </f:FormElement>
-                            <f:FormElement id="idFormElement2" label="Objeto">
+                            <f:FormElement id="idFormElement2" label="{i18n>dialog.label.object}">
                                 <f:fields>
                                     <Input
                                         id="idDialogObject"
-                                        placeholder="Ingrese un objeto..."
-                                        value="{Object}"/> 
+                                        placeholder="{i18n>dialog.ph.object}"
+                                        value="{Object}"
+                                        required="true"/> 
                                 </f:fields>
                             </f:FormElement>
-                            <f:FormElement id="idFormElement3" label="Número">
+                            <f:FormElement id="idFormElement3" label="{i18n>dialog.label.number}">
                                 <f:fields>
-                                    <StepInput
+                                    <Input
                                         id="idDialogNumber"
-                                        placeholder="Ingrese un número..."
-                                        value="{Number}"/> 
+                                        type="Number"
+                                        required="true"
+                                        placeholder="{i18n>dialog.ph.number}"
+                                        value="{path:'Number', type:'sap.ui.model.type.Integer'}"/> 
                                 </f:fields>
                             </f:FormElement>
-                            <f:FormElement id="idFormElement4" label="Valor">
+                            <f:FormElement id="idFormElement4" label="{i18n>dialog.label.value}">
                                 <f:fields>
                                     <Input
                                         id="idDialogValue"
-                                        placeholder="Ingrese un valor..."
+                                        placeholder="{i18n>dialog.ph.value}"
                                         value="{Value}"/> 
                                 </f:fields>
                             </f:FormElement>
-                            <f:FormElement id="idFormElement5" label="Descripción">
+                            <f:FormElement id="idFormElement5" label="{i18n>dialog.label.description}">
                                 <f:fields>
                                     <TextArea
                                         id="idDialogDescription"
                                         value="{Description}"
-                                        placeholder="Ingrese una descripción..."
+                                        placeholder="{i18n>dialog.ph.description}"
                                         width="100%" />
                                 </f:fields>
                             </f:FormElement>

@@ -9,23 +9,15 @@
                 id="addButton"
                 icon="sap-icon://add"
                 type="Transparent"
-                text="Add"
+                text="{i18n>list.button.add}"
                 visible="{=!${viewModel>/editMode}}"
                 press="onAdd"                          
-            />
-            <Button
-                id="deleteButton"
-                icon="sap-icon://delete"
-                type="Transparent"
-                text="Delete"
-                visible="{viewModel>/editMode}"   
-                press="onDelete"                     
-            />
+            />   
             <Button
                 id="editButton"
                 icon="sap-icon://edit"
                 type="Transparent"
-                text="Edit"
+                text="{i18n>list.button.edit}"
                 visible="{=!${viewModel>/editMode}}"
                 press="onEdit"                          
             />
@@ -33,15 +25,23 @@
                 id="saveButton"
                 icon="sap-icon://save"
                 type="Transparent"
-                text="Save"                        
+                text="{i18n>list.button.save}"                        
                 visible="{viewModel>/editMode}"
                 press="onSave"
+            />
+            <Button
+                id="deleteButton"
+                icon="sap-icon://delete"
+                type="Transparent"
+                text="{i18n>list.button.delete}"
+                visible="{viewModel>/editMode}"   
+                press="onDelete"                     
             />
             <Button
                 id="cancelButton"
                 icon="sap-icon://decline"
                 type="Transparent"
-                text="Cancel"          
+                text="{i18n>list.button.cancel}"          
                 visible="{viewModel>/editMode}"
                 press="onCancel"              
             />
@@ -54,42 +54,35 @@
             <headerToolbar>
                 <OverflowToolbar id="tableOverflowToolbar">
                     <content>
-                        <Title id="tableTitle" text="Excepciones" level="H2"/>
+                        <Title id="tableTitle" text="{i18n>list.table.title}" level="H2"/>
                         <ToolbarSpacer id="tableTitleSpacer" />
-                        
-
                     </content>
                 </OverflowToolbar>
             </headerToolbar>
-            <!-- <infoToolbar>
-                <OverflowToolbar>
-                    <Label text="Wide range of available products"/>
-                </OverflowToolbar>
-            </infoToolbar> -->
             <columns>
                 <Column id="columnId1">
-                    <Text id="columnTitle1" text="Product" />
+                    <Text id="columnTitle1" text="{i18n>list.table.programColumn.title}" />
                 </Column>
                 <Column id="columnId2"
                     demandPopin="true"
                     hAlign="Center">
-                    <Text id="columnTitle2" text="Object" />
+                    <Text id="columnTitle2" text="{i18n>list.table.objectColumn.title}" />
                 </Column>
                 <Column id="columnId3"
                     demandPopin="true"
                     hAlign="Center">
-                    <Text id="columnTitle3" text="Number" />
+                    <Text id="columnTitle3" text="{i18n>list.table.numberColumn.title}" />
                 </Column>
                 <Column id="columnId4"
                     minScreenWidth="Desktop"
                     demandPopin="true"
                     width="25%">
-                    <Text id="columnTitle4" text="Value" />
+                    <Text id="columnTitle4" text="{i18n>list.table.valueColumn.title}" />
                 </Column>          
                 <Column id="columnId5"
                     minScreenWidth="Desktop"
                     width="25%">
-                    <Text id="columnTitle5" text="Description" />
+                    <Text id="columnTitle5" text="{i18n>list.table.descriptionColumn.title}" />
                 </Column>
             </columns>
             <items>
@@ -107,11 +100,12 @@
                         <Input
                             id="tableItems4"
                             value="{Value}"
+                            placeholder="{i18n>list.table.valueColumn.ph}"
                             editable="{viewModel>/editMode}"/>               
                         <TextArea
                             id="tableItems5"
                             value="{Description}"
-                            placeholder="Ingrese una descripción"
+                            placeholder="{i18n>list.table.descriptionColumn.ph}"
                             editable="{viewModel>/editMode}"
                             width="100%" />
                     </cells>
