@@ -116,9 +116,9 @@ sap.ui.define([
 											if(oResponse.__batchResponses[0].response.statusCode === '404'){
 												that.getView().getModel().resetChanges();
 											}
-										}
-									}else{
-										sap.m.MessageToast.show("Se han guardado los cambios");
+										} else{
+                                            sap.m.MessageToast.show("Se han guardado los cambios");
+                                        }
 									}
                                     that.toggleEditMode(false);
 								},
@@ -164,7 +164,7 @@ sap.ui.define([
                             that.getView().getModel().submitChanges({
                                 success: function (oResponse) {
                                     that.getView().setBusy(false);
-                                    sap.m.MessageToast.show("Se han borrado las entradas");
+                                    sap.m.MessageToast.show("Se han borrado los registros");
                                     oTable.removeSelections();
                                     oTable.setSelectedContextPaths([]);
                                     that.getView().getModel().setDeferredGroups(ogetDeferredGroups);
