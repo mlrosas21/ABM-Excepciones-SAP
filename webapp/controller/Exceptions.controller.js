@@ -18,31 +18,42 @@ sap.ui.define([
 					busy: true,
 					delay: 0,
 					totalItems: 0,
-					editMode: false
+					editMode: false,
+                    deleteMode: false
 				})
                 this.getView().setModel(oViewModel, "viewModel");
             },
             onAfterRendering: function(){
                 this.getView().getModel().setUseBatch(true)                                
             },
-            toggleEditMode: function(bool){
-                switch(bool){
-                    case true:
-                        this.byId("idExceptionsTable").setMode(sap.m.ListMode.MultiSelect)
+            toggleMode: function(mode){
+                switch(mode){
+                    case 'edit':
+                        this.byId("idExceptionsTable").setMode(sap.m.ListMode.None)
+                        this.getView().getModel("viewModel").setProperty("/deleteMode", false)
                         this.getView().getModel("viewModel").setProperty("/editMode", true) 
                         break;
-                    case false:
+                    case 'delete':
+                        this.byId("idExceptionsTable").setMode(sap.m.ListMode.MultiSelect)
+                        this.getView().getModel("viewModel").setProperty("/deleteMode", true)
+                        this.getView().getModel("viewModel").setProperty("/editMode", false)
+                        break;
+                    case 'none':
                         this.byId("idExceptionsTable").setMode(sap.m.ListMode.None)
+                        this.getView().getModel("viewModel").setProperty("/deleteMode", false)
                         this.getView().getModel("viewModel").setProperty("/editMode", false)
                         break;
                 }
             },
             onEdit: function(){
-                this.toggleEditMode(true)
+                this.toggleMode("edit")
             },           
             onCancel: function(){
-                this.toggleEditMode(false)
+                this.toggleMode("none")
                 this.getView().getModel().resetChanges();
+            },
+            onDelete: function(){
+                this.toggleMode("delete")
             },
             onAdd: function(){
                 if (this._oDialog) {
@@ -145,12 +156,12 @@ sap.ui.define([
                                             sap.m.MessageToast.show("Se han guardado los cambios");
                                         }
 									}
-                                    that.toggleEditMode(false);
+                                    that.toggleMode("none");
 								},
 								error: function (oResponse) {
 									sap.m.MessageToast.show("Se ha producido un error, intente nuevamente");
 									that.getView().getModel().resetChanges();
-									that.toggleEditMode(false);
+									that.toggleMode("none");
 								}
 							});
 						} else {
@@ -159,7 +170,7 @@ sap.ui.define([
 					}
 				});
             },
-            onDelete: function () {
+            onDeleteConfirm: function () {
                 let that = this
                 let ogetDeferredGroups = this.getView().getModel().getDeferredGroups()
                 let oTable = this.getView().byId("idExceptionsTable")
@@ -189,6 +200,7 @@ sap.ui.define([
                                     oTable.removeSelections();
                                     oTable.setSelectedContextPaths([]);
                                     that.getView().getModel().setDeferredGroups(ogetDeferredGroups);
+                                    that.toggleMode("none")
                                 },
                                 error: function (oResponse) {
                                     that.getView().setBusy(false);
@@ -196,6 +208,7 @@ sap.ui.define([
                                     oTable.removeSelections();
                                     oTable.setSelectedContextPaths([]);
                                     that.getView().getModel().setDeferredGroups(ogetDeferredGroups);
+                                    this.toggleMode("none")
                                 },
                                 groupId: "deleted"
                             });

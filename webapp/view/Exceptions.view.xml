@@ -8,18 +8,18 @@
             <Button
                 id="addButton"
                 icon="sap-icon://add"
-                type="Transparent"
+                type="Accept"                  
                 text="{i18n>list.button.add}"
-                visible="{=!${viewModel>/editMode}}"
-                press="onAdd"                          
+                visible="{=!(${viewModel>/editMode} || ${viewModel>/deleteMode})}"
+                press="onAdd"       
             />   
             <Button
                 id="editButton"
                 icon="sap-icon://edit"
-                type="Transparent"
+                type="Emphasized"                          
                 text="{i18n>list.button.edit}"
-                visible="{=!${viewModel>/editMode}}"
-                press="onEdit"                          
+                visible="{=!(${viewModel>/editMode} || ${viewModel>/deleteMode})}"
+                press="onEdit"
             />
             <Button
                 id="saveButton"
@@ -30,19 +30,27 @@
                 press="onSave"
             />
             <Button
+                id="confirmButton"
+                icon="sap-icon://accept"
+                type="Accept"
+                text="{i18n>list.button.confirm}"                        
+                visible="{viewModel>/deleteMode}"
+                press="onDeleteConfirm"
+            />
+            <Button
                 id="deleteButton"
                 icon="sap-icon://delete"
-                type="Transparent"
+                type="Reject"                     
                 text="{i18n>list.button.delete}"
-                visible="{viewModel>/editMode}"   
-                press="onDelete"                     
+                visible="{=!(${viewModel>/editMode} || ${viewModel>/deleteMode})}"   
+                press="onDelete"
             />
             <Button
                 id="cancelButton"
                 icon="sap-icon://decline"
                 type="Transparent"
                 text="{i18n>list.button.cancel}"          
-                visible="{viewModel>/editMode}"
+                visible="{= (${viewModel>/editMode} || ${viewModel>/deleteMode})}"
                 press="onCancel"              
             />
 		</headerContent>
