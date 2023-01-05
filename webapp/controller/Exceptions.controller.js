@@ -2,15 +2,16 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageBox",
-    "sap/ui/core/Fragment"
+    "sap/ui/core/Fragment",
+    'sap/m/MessageStrip'
 ],
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      */
-    function (Controller, JSONModel, MessageBox, Fragment) {
+    function (Controller, JSONModel, MessageBox, Fragment, MessageStrip) {
         "use strict";
-
         return Controller.extend("ypf.zparamfreegd0.controller.Exceptions", {
+            
             onInit: function () {
                 const oViewModel = new JSONModel({
 					tableNoDataText : "No DATA",
@@ -20,18 +21,9 @@ sap.ui.define([
 					editMode: false
 				})
                 this.getView().setModel(oViewModel, "viewModel");
-
             },
             onAfterRendering: function(){
-                this.getView().getModel().setUseBatch(true)
-            },
-            onEdit: function(){
-                this.toggleEditMode(true)
-            },
-            
-            onCancel: function(){
-                this.toggleEditMode(false)
-                this.getView().getModel().resetChanges();
+                this.getView().getModel().setUseBatch(true)                                
             },
             toggleEditMode: function(bool){
                 switch(bool){
@@ -45,8 +37,14 @@ sap.ui.define([
                         break;
                 }
             },
+            onEdit: function(){
+                this.toggleEditMode(true)
+            },           
+            onCancel: function(){
+                this.toggleEditMode(false)
+                this.getView().getModel().resetChanges();
+            },
             onAdd: function(){
-                let oDeferredGroups = this.getView().getModel().getDeferredGroups();
                 if (this._oDialog) {
                     this._oDialog.destroy();
                 }
@@ -67,40 +65,67 @@ sap.ui.define([
                     oFormCreacion.setBindingContext(context);
                     this.getView().addDependent(oPopUp);
                     this._oDialog.open()
+                    this.setInputValue("idDialogProgram", "CHECK_CONDITION")
+                    this.setInputValue("idDialogObject", "USUARIO")
                 }.bind(this))
             },
-            onCrearExcepcion: function(oEvent){
+            setInputValue: function(inputId, value){
+                let input = this.getView().byId(inputId)
+                input.setValue(value)
+                input.setEnabled(false)
+            },
+            onCreateException: function(oEvent){
                 let that = this
                 let oContext = that.getView().byId("idFormCreacion").getBindingContext()
-                let ogetDeferredGroups = this.getView().getModel().getDeferredGroups()
-                MessageBox.confirm("Los cambios se asentarán en la base de datos. ¿Desea continuar?", {
-                    actions: ["Confirmar", MessageBox.Action.CANCEL],
-                    emphasizedAction: "Confirmar",
-                    onClose: function (sAction) {
-                        if (sAction === "Confirmar") {
-                            that.getView().getModel().submitChanges({
-                                success: function () {
-                                    that._oDialog.setBusy(false);
-                                    sap.m.MessageToast.show("Se han guardado los cambios");
-                                    that.getView().getModel().setDeferredGroups(ogetDeferredGroups);
-                                },
-                                error: function () {
-                                    that._oDialog.setBusy(false);
-                                    sap.m.MessageToast.show("Se ha producido un error, intente nuevamente");
-                                    that.getView().getModel().setDeferredGroups(ogetDeferredGroups);
-                                }
-                            });
-                            that._oDialog.close();
-                            that._oDialog.destroy();
-                        } else {
-                            that.getView().getModel().deleteCreatedEntry(oContext); // borrar entrada temporal
-                            that.getView().getModel().resetChanges();
-                            that.getView().getModel().setDeferredGroups(ogetDeferredGroups);
-                            that._oDialog.close();
-                            that._oDialog.destroy();
+                if(this.validateNumber(oContext)){
+                    let ogetDeferredGroups = this.getView().getModel().getDeferredGroups()
+                    MessageBox.confirm("Los cambios se asentarán en la base de datos. ¿Desea continuar?", {
+                        actions: ["Confirmar", MessageBox.Action.CANCEL],
+                        emphasizedAction: "Confirmar",
+                        onClose: function (sAction) {
+                            if (sAction === "Confirmar") {
+                                that.getView().getModel().submitChanges({
+                                    success: function () {
+                                        that._oDialog.setBusy(false);
+                                        sap.m.MessageToast.show("Se han guardado los cambios");
+                                        that.getView().getModel().setDeferredGroups(ogetDeferredGroups);
+                                    },
+                                    error: function () {
+                                        that._oDialog.setBusy(false);
+                                        sap.m.MessageToast.show("Se ha producido un error, intente nuevamente");
+                                        that.getView().getModel().setDeferredGroups(ogetDeferredGroups);
+                                    }
+                                });
+                                that._oDialog.close();
+                                that._oDialog.destroy();
+                            } else {
+                                that.getView().getModel().deleteCreatedEntry(oContext); // borrar entrada temporal
+                                that.getView().getModel().resetChanges();
+                                that.getView().getModel().setDeferredGroups(ogetDeferredGroups);
+                                that._oDialog.close();
+                                that._oDialog.destroy();
+                            }
                         }
-                    }
-                });
+                    });
+                }
+            },
+            validateNumber: function(context){
+                let contextNumber = context.getObject().Number,
+                    oNumberInput = this.getView().byId("idDialogNumber").getValue(),
+                    oMsgStrip = this.getView().byId("idDialogMsgStrip")
+                if(oNumberInput == false){
+                    oMsgStrip.setVisible(true)
+                    oMsgStrip.setText(this.getView().getModel("i18n").getResourceBundle().getText("dialog.errors.noNumber"))
+                    return false
+                }
+                let aEntriesNumber = this.getView().byId("idExceptionsTable").getItems().map(e => e.getBindingContext().getObject().Number)
+                if(aEntriesNumber.includes(contextNumber)){        
+                    oMsgStrip.setVisible(true)
+                    oMsgStrip.setText(this.getView().getModel("i18n").getResourceBundle().getText("dialog.errors.repeatedNumber"))
+                    return false
+                }
+                oMsgStrip.setVisible(false)
+                return true
             },
             onSave: function(){
                 let that = this;
@@ -148,19 +173,15 @@ sap.ui.define([
                     actions: ["Confirmar", MessageBox.Action.CANCEL],
                     emphasizedAction: "Confirmar",
                     onClose: function (sAction) {
-                        //MessageToast.show("Action selected: " + sAction);
                         if (sAction === "Confirmar") {
                             that.getView().getModel().setDeferredGroups(["deleted"]);
                             that.getView().setBusy(true);
-    
-                            // armar grupo de borrado batch
                             aSelContextPaths.forEach(function (sPath) {
                                     this.getView().getModel().remove(sPath, {
                                         groupId: "deleted",
                                         refreshAfterChange: true
                                     });
                                 }.bind(that))
-                                // efectuar borrado
                             that.getView().getModel().submitChanges({
                                 success: function (oResponse) {
                                     that.getView().setBusy(false);

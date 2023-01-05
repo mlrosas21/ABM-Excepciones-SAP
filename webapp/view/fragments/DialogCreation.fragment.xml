@@ -3,9 +3,15 @@
 	xmlns:l="sap.ui.layout"
 	xmlns:f="sap.ui.layout.form"
 	xmlns:core="sap.ui.core">
-    <Dialog id="dialogEquipo" contentWidth="30%" busyIndicatorDelay="0" title="{i18n>dialog.title}" icon="sap-icon://sys-add">
-        		<l:Grid defaultSpan="L12 M12 S12" width="auto" id="idGrid">
-			<l:content>
+    <Dialog id="idDialogCreate" contentWidth="30%" busyIndicatorDelay="0" title="{i18n>dialog.title}" icon="sap-icon://sys-add">
+        <l:Grid defaultSpan="L12 M12 S12" width="auto" id="idGrid" vSpacing="0">
+            <l:content>
+            <MessageStrip
+                id="idDialogMsgStrip"
+                showIcon="true"
+                type="Error"
+                class="sapUiSmallMarginTop sapUiTinyMarginBeginEnd"
+                visible="false"/>
             <f:Form id="idFormCreacion" editable="true">
                 <f:layout>
                     <f:ResponsiveGridLayout id="idGridLayout"
@@ -74,10 +80,10 @@
                     </f:FormContainer>
                 </f:formContainers>
             </f:Form>
-			</l:content>
-		</l:Grid>
+            </l:content>
+        </l:Grid>
         <buttons>
-			<Button id="idAcceptButton" text="Aceptar" press="onCrearExcepcion" type="Accept"/>
+			<Button id="idAcceptButton" text="Aceptar" press="onCreateException" type="Accept"/>
             <Button id="idCancelButton" text="Cancelar" press="onDialogClose" type="Reject"/> 
 		</buttons>
     </Dialog>
